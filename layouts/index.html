@@ -66,6 +66,39 @@ jQuery(document).ready(function($) {
                 '\n[[b;white;]Available commands:]\n' + 
                commandsHelp();
 
+
+    var ls = [
+      {{ range .Site.Data.blog  }}
+          '-rw-r-r\t {{ .author }}\t{{ .date }}\t{{ .title }}\n' + 
+      {{ end }}
+      '\r'
+    ];
+
+/*  cat variables */
+
+    /* cat variables marker */
+ 
+        var cat_post = [
+      {{ range .Site.Data.blog }}
+        {{ if eq .title "post" }}
+          '\t{{ .title }}\n\n{{ .blogpost }}\n' +
+        {{ end }}
+      {{ end }}
+      '\r'
+    ];
+
+    
+    var cat_blaat = [
+      {{ range .Site.Data.blog }}
+        {{ if eq .title "blaat" }}
+          '\t{{ .title }}\n\n{{ .blogpost }}\n' + 
+        {{ end }}
+      {{ end }}
+      '\r'
+    ];
+
+/*  end cat variables */
+
     var whois = [
     {{ with .Site.Params.whois.details }} 
         '[[b;grey;]Name:]\t\t\t{{ .name }}\n' + 
@@ -313,7 +346,18 @@ jQuery(document).ready(function($) {
         } 
                     
         switch(commands[0]) {
-            case 'whois':
+            case 'cat':
+                if (commands[1] == "blaat") {
+                  echoArray(cat_blaat);
+                  /* cat command marker */
+                    } else if (commands[1] == "post") {
+                  echoArray(cat_post);
+                } else {
+                  term.echo("No such file or directory");
+                }
+                break;
+                /* end cat command */
+                case 'whois':
                 {{ if .Site.Params.whois.settings.useLess }}
                 useLess = true;
                 {{ end }}
