@@ -38,21 +38,18 @@ Live example at: <https://coolapso.sh>
     * Any social network is supported, even the ones that don't exist! just provide a name and a URL
     * The social network name can be hidden and show only the URL
   * **work:** shows work experience information
-    * Title can have custom color
   * **education:** shows education information
-    * Title can have custom color
   * **sklls:** Shows skills information
-    * Skill name can have custom color
   * **softskills:** shows softskills information
-    * Skill name can have custom color
   * **languages:** Shows languages skills information
-    * Language name can have custom color
   * **projects:** Shows projects information
-    * Project title can have custom color
+  * **certifications:** Shows certifications information
+  * **publications:** Shows publications information
   * **misc:** Free text
     * misc command can be overriden and given another name
     * Title can have custom color
     * Content can have custom color
+  * each section have multiple configuration options, see the [config.yml](config.yml) for more details
 * Extra commands:
   * **startx:** Shows "loading..." progress bar and redirects to another website
     * Disabled by default
