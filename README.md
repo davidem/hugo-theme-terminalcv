@@ -13,66 +13,68 @@ Live example at: <https://coolapso.sh>
 
 # Features
 
-* Blogging:
-  * Toggle support, don't want blog features? just disable them!
-  * Support for images
-  * Supoort for [hugo shortcodes](https://gohugo.io/content-management/shortcodes/) (not fully tested, but should work!)
-* Custom Greeting
-  * Multi line text is respected
-* Customizable prompt
-  * Custom before & after prompt text
-  * Custom before & after prompt colors
-  * Custom prompt text
-  * Custom prompt text Color
-  * custom separator text
-  * custom separator color
-  * custom before & after symbols text
-  * custom before & after symbols colors
-  * Custom symbols
-  * Custom symbols color
-  * Custom extra text
-  * Custom extra text color
-* Multiple sections with individual commands:
-  * **Whois:** General information about the individual
-  * **social:** shows social networks
-    * Any social network is supported, even the ones that don't exist! just provide a name and a URL
-    * The social network name can be hidden and show only the URL
-  * **work:** shows work experience information
-  * **education:** shows education information
-  * **sklls:** Shows skills information
-  * **softskills:** shows softskills information
-  * **languages:** Shows languages skills information
-  * **projects:** Shows projects information
-  * **certifications:** Shows certifications information
-  * **publications:** Shows publications information
-  * **misc:** Free text
-    * misc command can be overriden and given another name
-    * Title can have custom color
-    * Content can have custom color
-  * each section have multiple configuration options, see the [config.yml](config.yml) for more details
-* Extra commands:
-  * **startx:** Shows "loading..." progress bar and redirects to another website
-    * Disabled by default
-    * only enabled if provided a location to send to
-  * **exit:** Shows "terminating..." progress bar and redirects to another website
-    * Disabled by default
-    * only enabled if provided a location to send to
-  * **source:** Shows the glider and the theme github repo URL
-    * Enabled by default
-    * Can be disabled
-  * **version:** Shows the website version
-    * Disabled by default
-    * only enabled if provided a version parameter
-* Less, print commands output with less
-  * Global, all commands use less instead of standard output
-  * Per command, only defined commands use less as output method
-  * `less <command>`, will output using less instead of standard output
-* Command auto completion
-* progression bars can be interrupted by pressing `ctrl+d`
-* Favicons
-* Bootsequence:
-  * Option for a custom bootsequence to mimic the boot process of the terminal
-  * If the parameter is not set, the bootsequence is skipped.
+- Blogging:
+  - Toggle support, don't want blog features? just disable them!
+  - Support for images
+  - Supoort for [hugo shortcodes](https://gohugo.io/content-management/shortcodes/) (not fully tested, but should work!)
+- Custom Greeting
+  - Multi line text is respected
+  - Separate banner with different color is supported
+- Customizable prompt
+  - Custom before & after prompt text
+  - Custom before & after prompt colors
+  - Custom prompt text
+  - Custom prompt text Color
+  - custom separator text
+  - custom separator color
+  - custom before & after symbols text
+  - custom before & after symbols colors
+  - Custom symbols
+  - Custom symbols color
+  - Custom extra text
+  - Custom extra text color
+- Multiple sections with individual commands:
+  - **Whois:** General information about the individual
+  - **social:** shows social networks
+    - Any social network is supported, even the ones that don't exist! just provide a name and a URL
+    - The social network name can be hidden and show only the URL
+  - **work:** shows work experience information
+  - **education:** shows education information
+  - **sklls:** Shows skills information
+  - **softskills:** shows softskills information
+  - **languages:** Shows languages skills information
+  - **projects:** Shows projects information
+  - **certifications:** Shows certifications information
+  - **publications:** Shows publications information
+  - **misc:** Free text
+    - misc command can be overriden and given another name
+    - Title can have custom color
+    - Content can have custom color
+  - each section have multiple configuration options, see the [config.yml](config.yml) for more details
+- Extra commands:
+  - **startx:** Shows "loading..." progress bar and redirects to another website
+    - Disabled by default
+    - only enabled if provided a location to send to
+  - **exit:** Shows "terminating..." progress bar and redirects to another website
+    - Disabled by default
+    - only enabled if provided a location to send to
+  - **source:** Shows the glider and the theme github repo URL
+    - Enabled by default
+    - Can be disabled
+  - **version:** Shows the website version
+    - Disabled by default
+    - only enabled if provided a version parameter
+- Less, print commands output with less
+  - Global, all commands use less instead of standard output
+  - Per command, only defined commands use less as output method
+  - `less <command>`, will output using less instead of standard output
+- Command auto completion
+- progression bars can be interrupted by pressing `ctrl+d`
+- Favicons
+- Bootsequence:
+  - Option for a custom bootsequence to mimic the boot process of the terminal
+  - If the parameter is not set, the bootsequence is skipped.
+
 # How to start
 
 This theme is far more simplistic than most themes therefore running `hugo new site` creates a lot of things that are not necessary.
@@ -91,7 +93,7 @@ Now you can start personalizing it by changing the config.yml and when you are h
 
 If you are using git (which you should be!) for your website and don't want to make any radical changes to the theme itself, it's recommended that you add the theme as a submodule. This way, you can easily get new updates when they are available.
 
-``` bash
+```bash
 git submodule add https://github.com/coolapso/hugo-theme-terminalcv.git themes/terminalcv
 ```
 
@@ -114,12 +116,9 @@ params:
   blog: true
 ```
 
-The theme supports blog posts, site visitors can find the posts with the `posts` or `ls` commands, and can view posts with `cat <filename>` to see how it works you can read the [example post](/exampleSite/content/posts/examplepost/index.md). 
-
-
+The theme supports blog posts, site visitors can find the posts with the `posts` or `ls` commands, and can view posts with `cat <filename>` to see how it works you can read the [example post](/exampleSite/content/posts/examplepost/index.md).
 
 ![terminalCV](https://raw.githubusercontent.com/coolapso/hugo-theme-terminalcv/main/images/blogdemo.gif)
-
 
 The live demo may not be making use of the blogging capabilities, but you can always see it in action like this:
 
@@ -132,7 +131,7 @@ cd hugo-theme-terminalcv
 make server
 ```
 
-Now a demo will be available at http://localhost:1313
+Now a demo will be available at <http://localhost:1313>
 
 # Contributions
 
@@ -168,6 +167,6 @@ terminalCV makes use [jcubic/jquery.terminal](https://github.com/jcubic/jquery.t
 
 Let me know and feel free to open a Pull Request and add it to this list:
 
-|link                 | Description       |
-|---------------------|-------------------|
-|<https://coolapso.sh>  | Simple CV         |
+| link                  | Description |
+| --------------------- | ----------- |
+| <https://coolapso.sh> | Simple CV   |
