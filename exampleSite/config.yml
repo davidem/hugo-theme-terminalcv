@@ -203,6 +203,8 @@ params:
     details:
       - title: Project Red
         color: red
+        company: Reynholm Industries
+        role: Part of the IT Crowd
         date: since 2019
         link: https://example.com
         description: Describing red stuff

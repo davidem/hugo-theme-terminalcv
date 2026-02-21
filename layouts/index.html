@@ -216,9 +216,18 @@ jQuery(document).ready(function($) {
     {{ with .Site.Params.projects.details }}
         {{ range .}}
             '---\n' +
-            '[[b;{{ .color | default "grey" }};]{{ .title }}]\n' +
-            '{{ .date }}\n' +
+            '{{ .date }}: \t [[b;{{ .color | default "Lime" }};]{{ .title }}]\n' +
+            '[[b;{{ .color | default "Orange" }};]{{ .role }}], [[b;{{ .color | default "lightblue" }};]{{ .company }}]\n' +
+            {{ if and .role .company }}
+            '[[b;{{ .color | default "Orange" }};]{{ .role }}], [[b;{{ .color | default "lightblue" }};]{{ .company }}]\n' +
+            {{ else if .role }}
+            '[[b;{{ .color | default "Orange" }};]{{ .role }}]\n' +
+            {{ else if .company }}
+            '[[b;{{ .color | default "lightblue" }};]{{ .company }}]\n' +
+            {{ end }}
+            {{ if .link }}
             '{{ .link }}\n' +
+            {{ end }}
             {{ if .description }}
             '{{ .description }}\n' +
             {{ end }}
