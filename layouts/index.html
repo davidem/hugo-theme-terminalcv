@@ -49,12 +49,10 @@ jQuery(document).ready(function($) {
         {{ if .Site.Params.exitLocation }}
             exit: "exit the terminal",
         {{ end }}
-        {{ if .Site.Params.blog }}
-        posts: "List all posts",
-        {{ if .Site.Params.listLS }}
-        ls: "List all posts",
-        {{ end }}
-        cat: "Open a post",
+        {{ if .Site.Params.blog.enabled }}
+            posts: "List all posts",
+            ls: "List all posts",
+            cat: "Open a post",
         {{ end }}
         all: "Show all details about me",
     };
@@ -137,6 +135,40 @@ jQuery(document).ready(function($) {
     };
 
     function posts(term) {
+      {{ if .Site.Params.blog.lsClassic }}
+        // classic ls output
+        $.ajax({
+            url: "posts/index.xml",
+            type: 'GET',
+            dataType: 'xml',
+            success: function(xml) {
+                // let output = 'To read a post do: cat filename\n';
+                let output = '\n';
+                
+                $(xml).find('item').each(function() {
+                    let title = $(this).find('title').text();
+                    let filename = $(this).find('filename').text();
+                    let author = $(this).find('author').text() || "unknown";
+                    let pubDate = $(this).find('pubDate').text();
+                    
+                    let dateObj = new Date(pubDate);
+                    let date = dateObj.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: '2-digit' 
+                    });
+                    let line = `-r--r--r--  ${author.padEnd(12)}  ${date.padEnd(13)}  ${filename}`;
+                    output += line + '\n';
+                });
+                
+                term.echo(output);
+            },
+            error: function() {
+            term.echo("Error: Could not load posts data");
+            }
+        });
+      {{ else }}
+        // Original output
         $.ajax({
             url: "posts/",
             type: 'GET',
@@ -147,8 +179,8 @@ jQuery(document).ready(function($) {
                 term.echo("Error: Could not load posts data");
             }
         });
-    };
-
+      {{ end }}
+    }
 
     function catPost(term, postdir) {
         url = "/posts/" + postdir + "/";
@@ -163,6 +195,7 @@ jQuery(document).ready(function($) {
             }
         });
     }
+
     var certifications = [
     {{ with .Site.Params.certifications.details }}
         {{ range . }}
@@ -549,7 +582,7 @@ jQuery(document).ready(function($) {
                 term.echo("{{ .Site.Params.version }}");
                 break;
             {{ end }}
-            {{ if .Site.Params.blog }}
+            {{ if .Site.Params.blog.enabled }}
             case 'cat':
                 if (commands.length < 2) {
                     term.echo("Usage: cat <filename>");
