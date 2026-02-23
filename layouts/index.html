@@ -52,18 +52,17 @@ jQuery(document).ready(function($) {
         {{ if .Site.Params.blog.enabled }}
             posts: "List all posts",
             ls: "List all posts",
-            cat: "Open a post",
+            cat: {
+                description: "Open a post",
+                args: [
+                    {{ range where .Site.RegularPages "Section" "posts" }}
+                    "{{ with .File }}{{ path.BaseName .Dir }}{{ end }}",
+                    {{ end }}
+                ]
+            },
         {{ end }}
         all: "Show all details about me",
     };
-
-    {{ if .Site.Params.blog.enabled }}
-    var postFilenames = [
-        {{ range where .Site.Pages "Section" "posts" }}
-        "{{ with .File }}{{ path.BaseName .Dir }}{{ end }}",
-        {{ end }}
-    ];
-    {{ end }}
 
     function progressBar(number) {
         var barLength = Math.round(number / 10);
@@ -445,13 +444,13 @@ jQuery(document).ready(function($) {
             })();
         }
 
-        commands = command.split(/[ ]+/);
-        if (commands[0] == 'less') {
+        cmdParts = command.split(/[ ]+/);
+        if (cmdParts[0] == 'less') {
             useLess = true;
-            commands.shift();
+            cmdParts.shift();
         } 
                     
-        switch(commands[0]) {
+        switch(cmdParts[0]) {
             case 'whois':
                 {{ if .Site.Params.whois.settings.useLess }}
                 useLess = true;
@@ -583,10 +582,10 @@ jQuery(document).ready(function($) {
             {{ end }}
             {{ if .Site.Params.blog.enabled }}
             case 'cat':
-                if (commands.length < 2) {
+                if (cmdParts.length < 2) {
                     term.echo("Usage: cat <filename>");
                 } else {
-                    var  postdir = commands[1];
+                    var  postdir = cmdParts[1];
                     catPost(term, postdir);
                 }
                 break;
@@ -601,6 +600,7 @@ jQuery(document).ready(function($) {
                 term.echo("\nunknown command: " + command + "\n" +
                           "please type 'help' or '?' for a list of available commands\n");
         }
+
     }, {
 
         {{ if .Site.Params.bootsequence }} 
@@ -637,7 +637,26 @@ jQuery(document).ready(function($) {
         },
         autocompleteMenu: true,
         {{ if .Site.Params.blog.enabled }}
-          completion: Object.keys(commands).concat(postFilenames)
+          // own completion funciton with arguments support
+          completion: function(string) {
+              var command = this.get_command();
+              var parts = command.split(/\s+/);
+              var commandName = parts[0];
+              
+              // Complete command names
+              if (parts.length === 1 || command.indexOf(' ') === -1) {
+                  return Object.keys(commands).filter(function(cmd) {
+                      return cmd.startsWith(string);
+                  });
+              }
+              
+              // Arguments part for any command which has them
+              if (commands[commandName] && commands[commandName].args) {
+                  return commands[commandName].args.filter(function(arg) {
+                      return arg.startsWith(string);
+                  });
+              }
+          }
         {{ else }}
           completion: Object.keys(commands)
         {{ end }}
