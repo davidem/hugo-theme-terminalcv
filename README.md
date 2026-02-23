@@ -70,6 +70,7 @@ Live example at: <https://coolapso.sh>
   - Per command, only defined commands use less as output method
   - `less <command>`, will output using less instead of standard output
 - Command auto completion
+- Cat <post> auto completion
 - progression bars can be interrupted by pressing `ctrl+d`
 - Favicons
 - Bootsequence:
