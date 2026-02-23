@@ -57,6 +57,14 @@ jQuery(document).ready(function($) {
         all: "Show all details about me",
     };
 
+    {{ if .Site.Params.blog.enabled }}
+    var postFilenames = [
+        {{ range where .Site.Pages "Section" "posts" }}
+        "{{ with .File }}{{ path.BaseName .Dir }}{{ end }}",
+        {{ end }}
+    ];
+    {{ end }}
+
     function progressBar(number) {
         var barLength = Math.round(number / 10);
         var barFilled = Array(barLength + 1).join("&#9611;");
@@ -628,7 +636,11 @@ jQuery(document).ready(function($) {
             }
         },
         autocompleteMenu: true,
-        completion: Object.keys(commands)
+        {{ if .Site.Params.blog.enabled }}
+          completion: Object.keys(commands).concat(postFilenames)
+        {{ else }}
+          completion: Object.keys(commands)
+        {{ end }}
         
     });
 });
