@@ -65,10 +65,11 @@ Live example at: <https://coolapso.sh>
   - **version:** Shows the website version
     - Disabled by default
     - only enabled if provided a version parameter
-- Less, print commands output with less
+- Less, print commands and posts (if blogging is enabled) output with less
   - Global, all commands use less instead of standard output
   - Per command, only defined commands use less as output method
   - `less <command>`, will output using less instead of standard output
+  - `less <post>`, will output using less instead of standard output
 - Command auto completion
 - Cat <post> auto completion
 - progression bars can be interrupted by pressing `ctrl+d`
