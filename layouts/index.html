@@ -3,9 +3,37 @@
 jQuery(document).ready(function($) {
     var animation = false;
 
+    var postFilenames = [
+        {{ range where .Site.RegularPages "Section" "posts" }}
+        "{{ with .File }}{{ path.BaseName .Dir }}{{ end }}",
+        {{ end }}
+    ];
+
+    var lessCommands = [
+        "whois",
+        {{ if .Site.Params.social }}"social",{{ end }}
+        {{ if .Site.Params.work }}"work",{{ end }}
+        {{ if .Site.Params.education }}"education",{{ end }}
+        {{ if .Site.Params.skills }}"skills",{{ end }}
+        {{ if .Site.Params.softSkills }}"softskills",{{ end }}
+        {{ if .Site.Params.languages }}"languages",{{ end }}
+        {{ if .Site.Params.projects }}"projects",{{ end }}
+        {{ if .Site.Params.publications }}"publications",{{ end }}
+        {{ if .Site.Params.certifications }}"certifications",{{ end }}
+        {{ if .Site.Params.misc }}"{{ .Site.Params.misc.commandName | default "other" }}",{{ end }}
+        {{ if not .Site.Params.Source }}"source",{{ end }}
+        "all"
+    ];
+
     var commands = {
         help: "shows help",
-        less: "Use less as output method",
+        less: {
+            description: "Use less as output method for commands",
+            args: [
+                ...lessCommands{{ if .Site.Params.blog.enabled }},
+                ...postFilenames{{ end }}
+            ]
+        },
         whois: "list basic details",
         {{ if .Site.Params.social }}
         social: "list social networks",
@@ -54,12 +82,8 @@ jQuery(document).ready(function($) {
             ls: "List all posts",
             cat: {
                 description: "Open a post",
-                args: [
-                    {{ range where .Site.RegularPages "Section" "posts" }}
-                    "{{ with .File }}{{ path.BaseName .Dir }}{{ end }}",
-                    {{ end }}
-                ]
-            },
+                args: postFilenames
+             },
         {{ end }}
         all: "Show all details about me",
     };
@@ -82,16 +106,22 @@ jQuery(document).ready(function($) {
 
         let helpText = ""
         for (let key in commands) {
-            if (commands.hasOwnProperty(key)) {
-                helpText += ` ${padKey(key, longestKeyLength)}\t${commands[key]}\n`
-            }
+          if (commands.hasOwnProperty(key)) {
+              commandValue = commands[key];
+              description = typeof commandValue === 'string' ? commandValue : commandValue.description;
+              helpText += ` ${padKey(key, longestKeyLength)}\t${description}\n`
+          }
         }
         return helpText
     }
 
     var help = '\n[[b;white;]usage:]\n' +
-                '\n <command> - execute the command\n' +
-                ' less <command> - use less to display the output\n\n' +
+                '\n <command>'.padEnd(17) + '- execute the command\n' +
+                ' less <command>'.padEnd(16) + '- use less to display the output\n\n' +
+                {{ if .Site.Params.blog.enabled }}
+                  ' less <post>'.padEnd(16) + '- use less to display a post\n' +
+                  ' cat <post>'.padEnd(16) + '- use cat to print a post\n' +
+                {{ end }}
                 '\n[[b;white;]Available commands:]\n' + 
                commandsHelp();
 
@@ -187,20 +217,6 @@ jQuery(document).ready(function($) {
             }
         });
       {{ end }}
-    }
-
-    function catPost(term, postdir) {
-        url = "/posts/" + postdir + "/";
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function(data) {
-                term.echo(data, {raw: true});
-            },
-            error: function() {
-                term.echo("Error: Could not load post " + postdir);
-            }
-        });
     }
 
     var certifications = [
@@ -390,26 +406,57 @@ jQuery(document).ready(function($) {
     ]
 
     $('body').terminal(function(command, term) {
-
+  
         var useLess = false;
         {{if .Site.Params.useLess }}
         useLess = true;
         {{ end }}
 
-        function echoArray(array) {
+        function echoArray(array, options) {
+            var opts = options || {};
+            
             if (useLess) {
-                term.less(array, {
-                    onExit: function () {
-                        term.set_command('');
-                        term.scroll_to_bottom();
-                    },
-                });
+                if (opts.raw) {
+                    var content = array[0];
+                    var export_data = term.export_view();
+                    
+                    term.clear();
+                    term.echo(content, {raw: true});
+                    
+                    term.push(function(command) {}, {
+                        prompt: ':',
+                        keydown: function(e) {
+                            if (e.which === 81 || e.which === 113) { // Q
+                                term.pop();
+                                term.import_view(export_data);
+                                return false;
+                            }
+                        }
+                    });
+                } else {
+                    term.less(array);
+                }
             } else {
                 for (i = 0; i < array.length; i += 1) {
-                    term.echo(array[i]);
+                    term.echo(array[i], options || {});
                 }
             }
         }
+
+        function catPost(term, postdir) {
+        url = "/posts/" + postdir + "/";
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(data) {
+                // term.echo(data, {raw: true});
+                echoArray([data], {raw: true});
+            },
+            error: function() {
+                term.echo("Error: Could not load post " + postdir);
+            }
+        });
+    }
         //Function used by StartX to draw the progressBar
         function progress(percent, width) {
             var size = Math.round(width*percent/100);
@@ -448,6 +495,17 @@ jQuery(document).ready(function($) {
         if (cmdParts[0] == 'less') {
             useLess = true;
             cmdParts.shift();
+
+            let target = cmdParts[0];
+
+            if (!target) { 
+                term.echo("less: missing argument");
+                return;
+            } else if (postFilenames.includes(target)) {
+                // its a blogpost
+                catPost(term, target);
+                return;
+            } 
         } 
                     
         switch(cmdParts[0]) {
