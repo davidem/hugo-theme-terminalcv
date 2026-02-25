@@ -6,7 +6,9 @@ title: "terminalcv"
 params:
   version: "2.0.0"
   description: "My terminal cv"
-  blog: true
+  blog: 
+    enabled: true
+    lsClassic: true
   prompt:
     core:
       text: "user@terminalCV"
