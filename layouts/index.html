@@ -569,8 +569,8 @@ jQuery(document).ready(function($) {
           term.typing('echo', 1, '{{ .Site.Params.bootsequence }}', function() {
             term.clear();
             {{ if .Site.Params.greetingbanner }}
-              term.echo("[[b;{{ .Site.Params.greetingBannerColor | default "coral" }};]{{ .Site.Params.greetingBanner }}{{ .Site.Params.version }}]");
-              term.echo("[[b;{{ .Site.Params.greetingColor | default "green" }};]{{ .Site.Params.greeting }}]");
+              term.echo("[[b;{{ .Site.Params.greetingBannerColor | default "white" }};]{{ .Site.Params.greetingBanner }}{{ .Site.Params.version }}]");
+              term.echo("[[b;{{ .Site.Params.greetingColor | default "white" }};]{{ .Site.Params.greeting }}]");
             {{ else }}
               term.echo("[[b;{{ .Site.Params.greetingColor | default "white" }};]{{ .Site.Params.greeting }}]");
             {{ end }}
