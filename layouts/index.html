@@ -273,7 +273,6 @@ jQuery(document).ready(function($) {
         {{ range .}}
             '---\n' +
             '{{ .date }}: \t [[b;{{ .color | default "Lime" }};]{{ .title }}]\n' +
-            '[[b;{{ .color | default "Orange" }};]{{ .role }}], [[b;{{ .color | default "lightblue" }};]{{ .company }}]\n' +
             {{ if and .role .company }}
             '[[b;{{ .color | default "Orange" }};]{{ .role }}], [[b;{{ .color | default "lightblue" }};]{{ .company }}]\n' +
             {{ else if .role }}
